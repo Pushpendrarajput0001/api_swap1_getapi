@@ -573,7 +573,7 @@ app.post("/fetchbalancesbscscan", async (req, res) => {
     res.status(200).json({ balances, totalNairaValue });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Error fetching token balances" });
+    res.status(500).json({ error: error });
   }
 });
 
@@ -689,47 +689,7 @@ app.post("/fetchbalancebyetherscans", async (req, res) => {
     res.status(200).json({ balances, totalNairaValue });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Error fetching token balances" });
-  }
-});
-
-app.post("/fetchBitcoinBalance", async (req, res) => {
-  try {
-    const userBitcoinAddress = req.body.userAddressBitCoin; // Get the user's Bitcoin address from the query parameter
-
-    // Use a reputable blockchain explorer API (Blockstream in this example)
-    const apiUrl = `https://blockstream.info/api/address/${userBitcoinAddress}`;
-
-    // Make a GET request to the API
-    const response = await axios.get(apiUrl);
-
-    // Extract balance from the API response
-    const balance = response.data.chain_stats.funded_txo_sum;
-
-    // Get current Bitcoin to Nigerian Naira conversion rate (replace this value with the actual rate)
-    const bitcoinToNairaRate = 35296826; // Replace this with the actual rate fetched from an API or service
-
-    const bitcoinImageUrl = "https://s2.coinmarketcap.com/static/img/coins/64x64/1.png"; // Replace with the actual Bitcoin image URL
-
-    // Calculate the Naira value of the Bitcoin balance
-    const nairaValue = balance * bitcoinToNairaRate;
-
-    const balances = [];
-
-
-    balances.push({
-      tokenName: "Bitcoin",
-      bitcoinAddress: userBitcoinAddress,
-      tokenBalance: balance,
-      tokenSymbol: "BTC",
-      nairaValue,
-      coinImageUrl: bitcoinImageUrl // Include the image URL for Bitcoin
-    });
-    const totalNairaValue = calculateTotalNairaValue(balances);
-    res.status(200).json({ balances, totalNairaValue });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Error fetching Bitcoin balance" });
+    res.status(500).json({ error: error });
   }
 });
 
